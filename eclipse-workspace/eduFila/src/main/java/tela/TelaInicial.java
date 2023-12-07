@@ -2,6 +2,8 @@ package tela;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import eduFila.InteligenciaFila;
 
@@ -13,6 +15,7 @@ public class TelaInicial extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JToggleButton tglRemovePessoas;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
@@ -51,15 +54,29 @@ public class TelaInicial extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				InteligenciaFila pc = new InteligenciaFila();
-				pc.processarVideo("C:\\opencv\\yolov4.weights", "C:\\opencv\\yolov4.cfg", "C:\\opencv\\ifrn.mp4");
+				pc.processarVideo("C:\\opencv\\yolov4.weights", "C:\\opencv\\yolov4.cfg", "C:\\opencv\\ifrn.mp4",
+						tglRemovePessoas.isSelected());
 			}
 		});
 		btnNewButton.setBounds(107, 153, 305, 87);
 		contentPane.add(btnNewButton);
 
-		JToggleButton tglbtnNewToggleButton = new JToggleButton("Detectar Objetos");
-		tglbtnNewToggleButton.setBackground(new Color(255, 51, 0));
-		tglbtnNewToggleButton.setBounds(190, 262, 146, 23);
-		contentPane.add(tglbtnNewToggleButton);
+		tglRemovePessoas = new JToggleButton("Detectar Tudo / OFF");
+		tglRemovePessoas.setBackground(new Color(255, 0, 0));
+		tglRemovePessoas.setBounds(160, 263, 201, 31);
+		contentPane.add(tglRemovePessoas);
+
+		tglRemovePessoas.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if (tglRemovePessoas.isSelected()) {
+					tglRemovePessoas.setBackground(new Color(0, 128, 0));
+					tglRemovePessoas.setText("Detectar Tudo / ON");
+				} else {
+					tglRemovePessoas.setBackground(new Color(255, 0, 0));
+					tglRemovePessoas.setText("Detectar Tudo / OFF");
+				}
+			}
+		});
 	}
 }

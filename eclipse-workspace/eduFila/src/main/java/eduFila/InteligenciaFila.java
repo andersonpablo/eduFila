@@ -47,28 +47,27 @@ public class InteligenciaFila {
 		initializeGUI();
 	}
 
-	 private void initializeGUI() {
-	        jframe = new JFrame("Video");
-	        jframe.setIconImage(Toolkit.getDefaultToolkit().getImage(InteligenciaFila.class.getResource("/img/icon.jpg")));
-	        jframe.setTitle("FilaEdu - Monitoramento de Filas");
-	        vidpanel = new VideoLabel();
-	        jframe.getContentPane().setLayout(new BorderLayout());
-	        jframe.getContentPane().add(vidpanel, BorderLayout.CENTER);
+	private void initializeGUI() {
+		jframe = new JFrame("Video");
+		jframe.setIconImage(Toolkit.getDefaultToolkit().getImage(InteligenciaFila.class.getResource("/img/icon.jpg")));
+		jframe.setTitle("FilaEdu - Monitoramento de Filas");
+		vidpanel = new VideoLabel();
+		jframe.getContentPane().setLayout(new BorderLayout());
+		jframe.getContentPane().add(vidpanel, BorderLayout.CENTER);
 
-	        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        jframe.setSize(800, 600);  // Defina um tamanho inicial
-	        jframe.addComponentListener(new ComponentAdapter() {
-	            @Override
-	            public void componentResized(ComponentEvent e) {
-	                redimensionarVideo();
-	            }
-	        });
-	        jframe.setLocationRelativeTo(null);
-	        jframe.setVisible(true);
-	    }
+		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jframe.setSize(800, 600); // Defina um tamanho inicial
+		jframe.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				redimensionarVideo();
+			}
+		});
+		jframe.setLocationRelativeTo(null);
+		jframe.setVisible(true);
+	}
 
-
-	public void processarVideo(String modelWeights, String modelConfiguration, String filePath) {
+	public void processarVideo(String modelWeights, String modelConfiguration, String filePath, boolean todosObjetos) {
 		SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -103,17 +102,17 @@ public class InteligenciaFila {
 							Core.MinMaxLocResult mm = Core.minMaxLoc(scores);
 							float confidence = (float) mm.maxVal;
 							Point classIdPoint = mm.maxLoc;
+							 String label = NomesClassificadores.CLASS_NAMES.get((int) classIdPoint.x);
 
-							if (confidence > confThreshold) {
-								String label = NomesClassificadores.CLASS_NAMES.get((int) classIdPoint.x);
-								if (label.equalsIgnoreCase("pessoa")) {
-									Rect2d box = getBoundingBox(row, frame.cols(), frame.rows());
-									confs.add(confidence);
-									rects.add(box);
-									labels.add(label);
-								}
-							}
-						}
+						        // Adiciona objetos com confiança acima do limite, considerando a classe "pessoa" apenas se `todosObjetos` for verdadeiro
+						        if (confidence > confThreshold && (todosObjetos || (label.equals("pessoa") && !todosObjetos))) {
+						            Rect2d box = getBoundingBox(row, frame.cols(), frame.rows());
+						            confs.add(confidence);
+						            rects.add(box);
+						            labels.add(label);
+						        }
+						    }
+						
 					}
 
 					MatOfFloat confidences = new MatOfFloat(Converters.vector_float_to_Mat(confs));
@@ -176,18 +175,18 @@ public class InteligenciaFila {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
-	
+
 	private void redimensionarVideo() {
-        SwingUtilities.invokeLater(() -> {
-            ImageIcon imageIcon = (ImageIcon) vidpanel.getIcon();
-            if (imageIcon != null) {
-                Image imagem = imageIcon.getImage();
-                Image novaImagem = imagem.getScaledInstance(vidpanel.getWidth(), vidpanel.getHeight(),
-                        Image.SCALE_SMOOTH);
-                vidpanel.setIcon(new ImageIcon(novaImagem));
-            }
-        });
-    }
+		SwingUtilities.invokeLater(() -> {
+			ImageIcon imageIcon = (ImageIcon) vidpanel.getIcon();
+			if (imageIcon != null) {
+				Image imagem = imageIcon.getImage();
+				Image novaImagem = imagem.getScaledInstance(vidpanel.getWidth(), vidpanel.getHeight(),
+						Image.SCALE_SMOOTH);
+				vidpanel.setIcon(new ImageIcon(novaImagem));
+			}
+		});
+	}
 }
