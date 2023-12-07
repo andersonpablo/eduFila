@@ -19,6 +19,7 @@ public class TelaInicial extends JFrame {
 			try {
 				TelaInicial frame = new TelaInicial();
 				frame.setVisible(true);
+				frame.setLocationRelativeTo(null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -26,6 +27,7 @@ public class TelaInicial extends JFrame {
 	}
 
 	public TelaInicial() {
+		setResizable(false);
 		setTitle("FilaEdu - Monitoramento de Filas");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(TelaInicial.class.getResource("/img/icon.jpg")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

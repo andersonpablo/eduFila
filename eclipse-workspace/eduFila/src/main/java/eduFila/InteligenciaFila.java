@@ -1,5 +1,11 @@
 package eduFila;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,6 +18,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import org.opencv.core.Core;
@@ -40,15 +47,26 @@ public class InteligenciaFila {
 		initializeGUI();
 	}
 
-	private void initializeGUI() {
-		jframe = new JFrame("Video");
-		vidpanel = new JLabel();
-		jframe.setLayout(new BoxLayout(jframe.getContentPane(), BoxLayout.Y_AXIS));
-		jframe.add(vidpanel);
-		jframe.setSize(800, 600);
-		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		jframe.setVisible(true);
-	}
+	 private void initializeGUI() {
+	        jframe = new JFrame("Video");
+	        jframe.setIconImage(Toolkit.getDefaultToolkit().getImage(InteligenciaFila.class.getResource("/img/icon.jpg")));
+	        jframe.setTitle("FilaEdu - Monitoramento de Filas");
+	        vidpanel = new VideoLabel();
+	        jframe.getContentPane().setLayout(new BorderLayout());
+	        jframe.getContentPane().add(vidpanel, BorderLayout.CENTER);
+
+	        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        jframe.setSize(800, 600);  // Defina um tamanho inicial
+	        jframe.addComponentListener(new ComponentAdapter() {
+	            @Override
+	            public void componentResized(ComponentEvent e) {
+	                redimensionarVideo();
+	            }
+	        });
+	        jframe.setLocationRelativeTo(null);
+	        jframe.setVisible(true);
+	    }
+
 
 	public void processarVideo(String modelWeights, String modelConfiguration, String filePath) {
 		SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
@@ -158,5 +176,18 @@ public class InteligenciaFila {
 			e.printStackTrace();
 			return null;
 		}
+		
 	}
+	
+	private void redimensionarVideo() {
+        SwingUtilities.invokeLater(() -> {
+            ImageIcon imageIcon = (ImageIcon) vidpanel.getIcon();
+            if (imageIcon != null) {
+                Image imagem = imageIcon.getImage();
+                Image novaImagem = imagem.getScaledInstance(vidpanel.getWidth(), vidpanel.getHeight(),
+                        Image.SCALE_SMOOTH);
+                vidpanel.setIcon(new ImageIcon(novaImagem));
+            }
+        });
+    }
 }
