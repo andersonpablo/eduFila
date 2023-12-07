@@ -5,13 +5,13 @@ import java.util.List;
 
 public class NomesClassificadores {
 	
-	static final List<String> CLASS_NAMES = Arrays.asList("pessoa", "bicicleta", "carro", "motorbike",
-			"aeroplane", "bus", "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign", "parking meter",
-			"bench", "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack",
-			"umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite",
-			"baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
-			"fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog",
-			"pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed", "diningtable", "toilet", "tvmonitor",
-			"laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink",
-			"refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush");
+	static final List<String> CLASS_NAMES = Arrays.asList("pessoa", "bicicleta", "carro", "moto",
+			"aeroplano", "ônibus", "trem", "caminhão", "barco", "semáforo", "hidrante", "placa de pare", "parquímetro",
+			"banco", "pássaro", "gato", "cachorro", "cavalo", "ovelha", "vaca", "elefante", "urso", "zebra", "girafa", "mochila",
+			"guarda-chuva", "bolsa", "gravata", "mala", "frisbee", "esquis", "snowboard", "bola esportiva", "pipa",
+			"bastão de beisebol", "luva de beisebol", "skate", "prancha de surfe", "raquete de tênis", "garrafa", "copo de vinho", "copo",
+			"garfo", "faca", "colher", "tigela", "banana", "maçã", "sanduíche", "laranja", "brócolis", "cenoura", "cachorro-quente",
+			"pizza", "rosquinha", "bolo", "cadeira", "sofá", "planta em vaso", "cama", "mesa de jantar", "vaso sanitário", "monitor de TV",
+			"laptop", "mouse", "controle remoto", "teclado", "celular", "micro-ondas", "forno", "torradeira", "pia",
+			"geladeira", "livro", "relógio", "vaso", "tesoura", "ursinho de pelúcia", "secador de cabelo", "escova de dente");
 }
