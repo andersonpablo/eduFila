@@ -43,7 +43,7 @@ public class TelaInicial extends JFrame {
 		contentPane.setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(TelaInicial.class.getResource("/img/filaedu_300.png")));
+		lblNewLabel.setIcon(new ImageIcon(TelaInicial.class.getResource("/img/filaedu.png")));
 		lblNewLabel.setBounds(97, 25, 315, 117);
 		contentPane.add(lblNewLabel);
 
