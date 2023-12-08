@@ -60,7 +60,7 @@ public class InteligenciaFila {
 		jframe.getContentPane().add(vidpanel, BorderLayout.CENTER);
 
 		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		jframe.setSize(800, 600); // Defina um tamanho inicial
+		jframe.setSize(800, 600); // defina um tamanho inicial
 		jframe.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -143,7 +143,7 @@ public class InteligenciaFila {
 							Point classIdPoint = mm.maxLoc;
 							String label = NomesClassificadores.CLASS_NAMES.get((int) classIdPoint.x);
 
-							// Adiciona objetos com confianï¿½a acima do limite, considerando a classe
+							// Adiciona objetos com confianca acima do limite, considerando a classe
 							// "pessoa" apenas se `todosObjetos` for verdadeiro
 							if (confidence > confThreshold
 									&& (todosObjetos || (label.equals("pessoa") && !todosObjetos))) {
@@ -155,25 +155,26 @@ public class InteligenciaFila {
 						}
 
 					}
+						//conferindo se as listas não estão vazias antes de continuar
+					if (!confs.isEmpty() && !rects.isEmpty() && !labels.isEmpty()) {
+						
+					    MatOfFloat confidences = new MatOfFloat(Converters.vector_float_to_Mat(confs));
+					    MatOfRect2d boxes = new MatOfRect2d(rects.toArray(new Rect2d[0]));
 
-					MatOfFloat confidences = new MatOfFloat(Converters.vector_float_to_Mat(confs));
-					MatOfRect2d boxes = new MatOfRect2d(rects.toArray(new Rect2d[0]));
+					    MatOfInt indices = new MatOfInt();
+					    Dnn.NMSBoxes(boxes, confidences, confThreshold, confThreshold, indices);
 
-					MatOfInt indices = new MatOfInt();
-					Dnn.NMSBoxes(boxes, confidences, confThreshold, confThreshold, indices);
-
-					int[] ind = indices.toArray();
-					for (int i : ind) {
-						Rect2d box = rects.get(i);
-						String labelText = labels.get(i);
-						Imgproc.rectangle(frame, box.tl(), box.br(), new Scalar(0, 255, 0), 2);
-						Imgproc.putText(frame, labelText, new Point(box.x, box.y - 10), Imgproc.FONT_HERSHEY_SIMPLEX,
-								0.5, new Scalar(0, 255, 0), 2);
-						// System.out.println(i);
-						contagem.setText("Quantidade de Pessoas: " + ind.length); // mostrando a quantidade de pessoas
-																					// no label
+					    int[] ind = indices.toArray();
+					    for (int i : ind) {
+					        Rect2d box = rects.get(i);
+					        String labelText = labels.get(i);
+					        Imgproc.rectangle(frame, box.tl(), box.br(), new Scalar(0, 255, 0), 2);
+					        Imgproc.putText(frame, labelText, new Point(box.x, box.y - 10), Imgproc.FONT_HERSHEY_SIMPLEX,
+					                0.5, new Scalar(0, 255, 0), 2);
+					        contagem.setText("Quantidade de Pessoas: " + ind.length); // mostrando a quantidade de pessoas no label
+					    }
 					}
-
+					
 					ImageIcon image = new ImageIcon(Mat2bufferedImage(frame));
 					vidpanel.setIcon(image);
 					vidpanel.repaint();
