@@ -208,17 +208,20 @@ public class InteligenciaFila {
 	}
 
 	private static BufferedImage Mat2bufferedImage(Mat image) {
-		MatOfByte bytemat = new MatOfByte();
-		Imgcodecs.imencode(".jpg", image, bytemat);
-		byte[] bytes = bytemat.toArray();
-		InputStream in = new ByteArrayInputStream(bytes);
-		try {
-			return ImageIO.read(in);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+	    if (image.empty()) {
+	        return null;  
+	    }
 
+	    MatOfByte bytemat = new MatOfByte();
+	    Imgcodecs.imencode(".jpg", image, bytemat);
+	    byte[] bytes = bytemat.toArray();
+
+	    try (InputStream in = new ByteArrayInputStream(bytes)) {
+	        return ImageIO.read(in);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
 
 	private void redimensionarVideo() {
