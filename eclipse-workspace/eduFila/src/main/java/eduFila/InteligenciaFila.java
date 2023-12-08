@@ -35,11 +35,16 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.utils.Converters;
 import org.opencv.videoio.VideoCapture;
+import javax.swing.JMenuBar;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JButton;
 
 public class InteligenciaFila {
 
 	private JFrame jframe;
 	private JLabel vidpanel;
+	private JLabel contagem;
 
 	public InteligenciaFila() {
 		initializeGUI();
@@ -47,6 +52,7 @@ public class InteligenciaFila {
 
 	private void initializeGUI() {
 		jframe = new JFrame("Video");
+		jframe.setResizable(false);
 		jframe.setIconImage(Toolkit.getDefaultToolkit().getImage(InteligenciaFila.class.getResource("/img/icon.jpg")));
 		jframe.setTitle("FilaEdu - Monitoramento de Filas");
 		vidpanel = new VideoLabel();
@@ -62,6 +68,40 @@ public class InteligenciaFila {
 			}
 		});
 		jframe.setLocationRelativeTo(null);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(Color.BLACK);
+		jframe.setJMenuBar(menuBar);
+		
+		JLabel lblNewLabel_3 = new JLabel(" Fila");
+		lblNewLabel_3.setForeground(new Color(155, 0, 0));
+		lblNewLabel_3.setFont(new Font("Eras Bold ITC", Font.BOLD, 30));
+		menuBar.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel = new JLabel("Edu   ");
+		lblNewLabel.setFont(new Font("Eras Bold ITC", Font.PLAIN, 30));
+		lblNewLabel.setForeground(new Color(0, 128, 0));
+		menuBar.add(lblNewLabel);
+		
+		JButton btnNewButton = new JButton("Iniciar");
+		btnNewButton.setFocusPainted(false);
+		btnNewButton.setForeground(Color.BLACK);
+		btnNewButton.setBackground(Color.WHITE);
+		menuBar.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Parar");
+		btnNewButton_1.setFocusPainted(false);
+		btnNewButton_1.setForeground(Color.BLACK);
+		btnNewButton_1.setBackground(Color.WHITE);
+		menuBar.add(btnNewButton_1);
+		
+		JLabel lblNewLabel_1 = new JLabel("                                                                             ");
+		menuBar.add(lblNewLabel_1);
+		
+		contagem = new JLabel("Quantidade de Pessoas:");
+		contagem.setForeground(Color.WHITE);
+		contagem.setFont(new Font("Franklin Gothic Medium Cond", Font.BOLD, 17));
+		menuBar.add(contagem);
 		jframe.setVisible(true);
 	}
 
@@ -71,7 +111,7 @@ public class InteligenciaFila {
 			protected Void doInBackground() throws Exception {
 				System.load("C:\\opencv\\build\\java\\x64\\opencv_java480.dll");
 
-				VideoCapture cap = new VideoCapture(filePath);
+				VideoCapture cap = new VideoCapture(0);
 
 				Mat frame = new Mat();
 
@@ -102,7 +142,7 @@ public class InteligenciaFila {
 							Point classIdPoint = mm.maxLoc;
 							 String label = NomesClassificadores.CLASS_NAMES.get((int) classIdPoint.x);
 
-						        // Adiciona objetos com confiança acima do limite, considerando a classe "pessoa" apenas se `todosObjetos` for verdadeiro
+						        // Adiciona objetos com confianï¿½a acima do limite, considerando a classe "pessoa" apenas se `todosObjetos` for verdadeiro
 						        if (confidence > confThreshold && (todosObjetos || (label.equals("pessoa") && !todosObjetos))) {
 						            Rect2d box = getBoundingBox(row, frame.cols(), frame.rows());
 						            confs.add(confidence);
@@ -126,7 +166,8 @@ public class InteligenciaFila {
 						Imgproc.rectangle(frame, box.tl(), box.br(), new Scalar(0, 255, 0), 2);
 						Imgproc.putText(frame, labelText, new Point(box.x, box.y - 10), Imgproc.FONT_HERSHEY_SIMPLEX,
 								0.5, new Scalar(0, 255, 0), 2);
-						System.out.println(i);
+						//System.out.println(i); 
+						contagem.setText("Quantidade de Pessoas: " + ind.length); //mostrando a quantidade de pessoas no label
 					}
 
 					ImageIcon image = new ImageIcon(Mat2bufferedImage(frame));

@@ -34,7 +34,7 @@ public class TelaInicial extends JFrame {
 		setTitle("FilaEdu - Monitoramento de Filas");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(TelaInicial.class.getResource("/img/icon.jpg")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 528, 361);
+		setBounds(100, 100, 515, 361);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -48,32 +48,38 @@ public class TelaInicial extends JFrame {
 		contentPane.add(lblNewLabel);
 
 		JButton btnNewButton = new JButton("Monitorar");
+		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnNewButton.setFocusPainted(false);
 		btnNewButton.setFont(new Font("Eras Bold ITC", Font.PLAIN, 24));
 		btnNewButton.setForeground(new Color(255, 255, 255));
-		btnNewButton.setBackground(new Color(0, 51, 0));
+		btnNewButton.setBackground(new Color(20, 41, 10));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				InteligenciaFila pc = new InteligenciaFila();
-				pc.processarVideo("C:\\opencv\\yolov4.weights", "C:\\opencv\\yolov4.cfg", "C:\\opencv\\ifrn.mp4",
+				pc.processarVideo("C:\\opencv\\yolov4.weights", "C:\\opencv\\yolov4.cfg", "C:\\opencv\\teste.mp4",
 						tglRemovePessoas.isSelected());
 			}
 		});
-		btnNewButton.setBounds(107, 153, 305, 87);
+		btnNewButton.setBounds(97, 153, 306, 87);
 		contentPane.add(btnNewButton);
 
 		tglRemovePessoas = new JToggleButton("Detectar Tudo / OFF");
-		tglRemovePessoas.setBackground(new Color(255, 0, 0));
-		tglRemovePessoas.setBounds(160, 263, 201, 31);
+		tglRemovePessoas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		tglRemovePessoas.setFocusPainted(false);
+		tglRemovePessoas.setFont(new Font("Eras Bold ITC", Font.BOLD, 12));
+		tglRemovePessoas.setForeground(Color.WHITE);
+		tglRemovePessoas.setBackground(new Color(158, 10, 10));
+		tglRemovePessoas.setBounds(148, 262, 201, 31);
 		contentPane.add(tglRemovePessoas);
 
 		tglRemovePessoas.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				if (tglRemovePessoas.isSelected()) {
-					tglRemovePessoas.setBackground(new Color(0, 128, 0));
+					tglRemovePessoas.setBackground(Color.green);
 					tglRemovePessoas.setText("Detectar Tudo / ON");
 				} else {
-					tglRemovePessoas.setBackground(new Color(255, 0, 0));
+					tglRemovePessoas.setBackground(new Color(158, 10, 10));
 					tglRemovePessoas.setText("Detectar Tudo / OFF");
 				}
 			}
