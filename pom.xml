@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>FilaEDU</groupId>
+	<artifactId>eduFila</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<dependencies>
+		<!-- DJL Dependencies -->
+		<!-- https://mvnrepository.com/artifact/ai.djl/api -->
+		<dependency>
+			<groupId>ai.djl</groupId>
+			<artifactId>api</artifactId>
+			<version>0.25.0</version>
+		</dependency>
+
+		<!--
+		https://mvnrepository.com/artifact/ai.djl.tensorflow/tensorflow-engine -->
+		<dependency>
+			<groupId>ai.djl.tensorflow</groupId>
+			<artifactId>tensorflow-engine</artifactId>
+			<version>0.25.0</version>
+		</dependency>
+
+		<!--
+		https://mvnrepository.com/artifact/ai.djl.tensorflow/tensorflow-model-zoo -->
+		<dependency>
+			<groupId>ai.djl.tensorflow</groupId>
+			<artifactId>tensorflow-model-zoo</artifactId>
+			<version>0.23.0</version>
+		</dependency>
+
+		<!-- OpenCV Dependency -->
+		<dependency>
+			<groupId>org.openpnp</groupId>
+			<artifactId>opencv</artifactId>
+			<version>4.8.1-0</version>
+		</dependency>
+	</dependencies>
+
+</project>
+

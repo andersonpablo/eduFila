@@ -1,6 +1,8 @@
 package eduFila;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
@@ -14,8 +16,10 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
@@ -35,10 +39,6 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.utils.Converters;
 import org.opencv.videoio.VideoCapture;
-import javax.swing.JMenuBar;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.JButton;
 
 public class InteligenciaFila {
 
@@ -68,36 +68,37 @@ public class InteligenciaFila {
 			}
 		});
 		jframe.setLocationRelativeTo(null);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.BLACK);
 		jframe.setJMenuBar(menuBar);
-		
+
 		JLabel lblNewLabel_3 = new JLabel(" Fila");
 		lblNewLabel_3.setForeground(new Color(155, 0, 0));
 		lblNewLabel_3.setFont(new Font("Eras Bold ITC", Font.BOLD, 30));
 		menuBar.add(lblNewLabel_3);
-		
+
 		JLabel lblNewLabel = new JLabel("Edu   ");
 		lblNewLabel.setFont(new Font("Eras Bold ITC", Font.PLAIN, 30));
 		lblNewLabel.setForeground(new Color(0, 128, 0));
 		menuBar.add(lblNewLabel);
-		
+
 		JButton btnNewButton = new JButton("Iniciar");
 		btnNewButton.setFocusPainted(false);
 		btnNewButton.setForeground(Color.BLACK);
 		btnNewButton.setBackground(Color.WHITE);
 		menuBar.add(btnNewButton);
-		
+
 		JButton btnNewButton_1 = new JButton("Parar");
 		btnNewButton_1.setFocusPainted(false);
 		btnNewButton_1.setForeground(Color.BLACK);
 		btnNewButton_1.setBackground(Color.WHITE);
 		menuBar.add(btnNewButton_1);
-		
-		JLabel lblNewLabel_1 = new JLabel("                                                                             ");
+
+		JLabel lblNewLabel_1 = new JLabel(
+				"                                                                             ");
 		menuBar.add(lblNewLabel_1);
-		
+
 		contagem = new JLabel("Quantidade de Pessoas:");
 		contagem.setForeground(Color.WHITE);
 		contagem.setFont(new Font("Franklin Gothic Medium Cond", Font.BOLD, 17));
@@ -140,17 +141,19 @@ public class InteligenciaFila {
 							Core.MinMaxLocResult mm = Core.minMaxLoc(scores);
 							float confidence = (float) mm.maxVal;
 							Point classIdPoint = mm.maxLoc;
-							 String label = NomesClassificadores.CLASS_NAMES.get((int) classIdPoint.x);
+							String label = NomesClassificadores.CLASS_NAMES.get((int) classIdPoint.x);
 
-						        // Adiciona objetos com confian�a acima do limite, considerando a classe "pessoa" apenas se `todosObjetos` for verdadeiro
-						        if (confidence > confThreshold && (todosObjetos || (label.equals("pessoa") && !todosObjetos))) {
-						            Rect2d box = getBoundingBox(row, frame.cols(), frame.rows());
-						            confs.add(confidence);
-						            rects.add(box);
-						            labels.add(label);
-						        }
-						    }
-						
+							// Adiciona objetos com confian�a acima do limite, considerando a classe
+							// "pessoa" apenas se `todosObjetos` for verdadeiro
+							if (confidence > confThreshold
+									&& (todosObjetos || (label.equals("pessoa") && !todosObjetos))) {
+								Rect2d box = getBoundingBox(row, frame.cols(), frame.rows());
+								confs.add(confidence);
+								rects.add(box);
+								labels.add(label);
+							}
+						}
+
 					}
 
 					MatOfFloat confidences = new MatOfFloat(Converters.vector_float_to_Mat(confs));
@@ -166,8 +169,9 @@ public class InteligenciaFila {
 						Imgproc.rectangle(frame, box.tl(), box.br(), new Scalar(0, 255, 0), 2);
 						Imgproc.putText(frame, labelText, new Point(box.x, box.y - 10), Imgproc.FONT_HERSHEY_SIMPLEX,
 								0.5, new Scalar(0, 255, 0), 2);
-						//System.out.println(i); 
-						contagem.setText("Quantidade de Pessoas: " + ind.length); //mostrando a quantidade de pessoas no label
+						// System.out.println(i);
+						contagem.setText("Quantidade de Pessoas: " + ind.length); // mostrando a quantidade de pessoas
+																					// no label
 					}
 
 					ImageIcon image = new ImageIcon(Mat2bufferedImage(frame));
