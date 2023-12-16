@@ -113,6 +113,7 @@ public class InteligenciaFila {
 				System.load("C:\\opencv\\build\\java\\x64\\opencv_java480.dll");
 
 				VideoCapture cap = new VideoCapture(0);
+				//VideoCapture cap = new VideoCapture(0, Videoio.CAP_DSHOW);
 
 				Mat frame = new Mat();
 
