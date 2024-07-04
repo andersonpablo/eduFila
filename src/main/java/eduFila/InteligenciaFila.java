@@ -39,6 +39,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.utils.Converters;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
 public class InteligenciaFila {
 
@@ -52,7 +53,6 @@ public class InteligenciaFila {
 
 	private void initializeGUI() {
 		jframe = new JFrame("Video");
-		jframe.setResizable(false);
 		jframe.setIconImage(Toolkit.getDefaultToolkit().getImage(InteligenciaFila.class.getResource("/img/icon.jpg")));
 		jframe.setTitle("FilaEdu - Monitoramento de Filas");
 		vidpanel = new VideoLabel();
@@ -112,8 +112,8 @@ public class InteligenciaFila {
 			protected Void doInBackground() throws Exception {
 				System.load("C:\\opencv\\build\\java\\x64\\opencv_java480.dll");
 
-				VideoCapture cap = new VideoCapture(0);
-				//VideoCapture cap = new VideoCapture(0, Videoio.CAP_DSHOW);
+				//VideoCapture cap = new VideoCapture(filePath);
+				VideoCapture cap = new VideoCapture(0, Videoio.CAP_DSHOW);
 
 				Mat frame = new Mat();
 
@@ -152,11 +152,12 @@ public class InteligenciaFila {
 								confs.add(confidence);
 								rects.add(box);
 								labels.add(label);
+								contagem.setText("Quantidade de objetos: ");
 							}
 						}
 
 					}
-						//conferindo se as listas não estão vazias antes de continuar
+						//conferindo se as listas nï¿½o estï¿½o vazias antes de continuar
 					if (!confs.isEmpty() && !rects.isEmpty() && !labels.isEmpty()) {
 						
 					    MatOfFloat confidences = new MatOfFloat(Converters.vector_float_to_Mat(confs));
@@ -172,7 +173,13 @@ public class InteligenciaFila {
 					        Imgproc.rectangle(frame, box.tl(), box.br(), new Scalar(0, 255, 0), 2);
 					        Imgproc.putText(frame, labelText, new Point(box.x, box.y - 10), Imgproc.FONT_HERSHEY_SIMPLEX,
 					                0.5, new Scalar(0, 255, 0), 2);
-					        contagem.setText("Quantidade de Pessoas: " + ind.length); // mostrando a quantidade de pessoas no label
+					        
+					        if(todosObjetos == true) {
+					        	contagem.setText("Quantidade de Objetos: " + ind.length); // mostrando a quantidade de Objetos no label
+					        } else {
+					        	contagem.setText("Quantidade de Pessoas: " + ind.length); // mostrando a quantidade de pessoas no label
+					        }
+					        
 					    }
 					}
 					
@@ -237,4 +244,5 @@ public class InteligenciaFila {
 			}
 		});
 	}
+	
 }
