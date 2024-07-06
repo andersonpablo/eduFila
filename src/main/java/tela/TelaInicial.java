@@ -58,6 +58,7 @@ public class TelaInicial extends JFrame {
 				InteligenciaFila pc = new InteligenciaFila();
 				pc.processarVideo("C:\\opencv\\yolov7-tiny.weights", "C:\\opencv\\yolov7-tiny.cfg", "C:\\opencv\\teste.mp4",
 						tglRemovePessoas.isSelected());
+				pc.todosObjetos = tglRemovePessoas.isSelected();
 			}
 		});
 		btnNewButton.setBounds(97, 153, 306, 87);

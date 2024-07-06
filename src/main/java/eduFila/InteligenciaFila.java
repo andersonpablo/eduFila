@@ -9,6 +9,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -17,11 +18,13 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -40,12 +43,16 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.utils.Converters;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class InteligenciaFila {
 
 	private JFrame jframe;
 	private JLabel vidpanel;
 	private JLabel contagem;
+	public VideoCapture cap;
+	public boolean todosObjetos;
 
 	public InteligenciaFila() {
 		initializeGUI();
@@ -84,19 +91,39 @@ public class InteligenciaFila {
 		menuBar.add(lblNewLabel);
 
 		JButton btnNewButton = new JButton("Iniciar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				IniciarGravacao();
+			}
+		});
 		btnNewButton.setFocusPainted(false);
-		btnNewButton.setForeground(Color.BLACK);
-		btnNewButton.setBackground(Color.WHITE);
+		btnNewButton.setForeground(Color.WHITE);
+		btnNewButton.setBackground(new Color(0, 128, 0));
 		menuBar.add(btnNewButton);
 
 		JButton btnNewButton_1 = new JButton("Parar");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PararGravacao();
+			}
+		});
 		btnNewButton_1.setFocusPainted(false);
-		btnNewButton_1.setForeground(Color.BLACK);
-		btnNewButton_1.setBackground(Color.WHITE);
+		btnNewButton_1.setForeground(Color.WHITE);
+		btnNewButton_1.setBackground(new Color(179, 0, 4));
 		menuBar.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("Monitorar Vídeo");
+		btnNewButton_2.setForeground(Color.WHITE);
+		btnNewButton_2.setBackground(Color.BLACK);
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SelecionarVideo();
+			}
+		});
+		menuBar.add(btnNewButton_2);
 
 		JLabel lblNewLabel_1 = new JLabel(
-				"                                                                             ");
+				"                                              ");
 		menuBar.add(lblNewLabel_1);
 
 		contagem = new JLabel("Quantidade de Pessoas:");
@@ -106,6 +133,42 @@ public class InteligenciaFila {
 		jframe.setVisible(true);
 	}
 
+	protected void SelecionarVideo() {
+		
+		JFileChooser jfileChooser = new JFileChooser();
+		
+		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Apenas .mp4", "mp4");
+		jfileChooser.setAcceptAllFileFilterUsed(false);
+		jfileChooser.addChoosableFileFilter(filtro);
+		
+		int respostDoFileChooser = jfileChooser.showOpenDialog(null);
+		
+		if(respostDoFileChooser == JFileChooser.APPROVE_OPTION) {
+			File arquivoSelecionado = jfileChooser.getSelectedFile();
+			System.out.println("Camninho do arquivo selecionado: " + arquivoSelecionado.getAbsolutePath());
+			
+			if(cap != null) {
+				cap.release();
+			}
+			
+			cap = new VideoCapture(arquivoSelecionado + "");
+			processarVideo("C:\\opencv\\yolov7-tiny.weights", "C:\\opencv\\yolov7-tiny.cfg", arquivoSelecionado + "", todosObjetos);
+			
+		} else {
+			System.out.println("nenhum arquivo encontrado");
+		}
+		
+	}
+
+	protected void PararGravacao() {
+		cap.release();
+	}
+
+	protected void IniciarGravacao() {
+		cap = new VideoCapture(0, Videoio.CAP_DSHOW);
+		processarVideo("C:\\opencv\\yolov7-tiny.weights", "C:\\opencv\\yolov7-tiny.cfg", "C:\\opencv\\teste.mp4", todosObjetos);
+	}
+
 	public void processarVideo(String modelWeights, String modelConfiguration, String filePath, boolean todosObjetos) {
 		SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
 			@Override
@@ -113,7 +176,7 @@ public class InteligenciaFila {
 				System.load("C:\\opencv\\build\\java\\x64\\opencv_java480.dll");
 
 				//VideoCapture cap = new VideoCapture(filePath);
-				VideoCapture cap = new VideoCapture(0, Videoio.CAP_DSHOW);
+				//VideoCapture cap = new VideoCapture(0, Videoio.CAP_DSHOW);
 
 				Mat frame = new Mat();
 
@@ -129,7 +192,7 @@ public class InteligenciaFila {
 					List<String> outBlobNames = getOutputNames(net);
 					net.forward(result, outBlobNames);
 
-					float confThreshold = 0.5f;
+					float confThreshold = 0.3f;
 
 					List<Float> confs = new ArrayList<>();
 					List<Rect2d> rects = new ArrayList<>();
