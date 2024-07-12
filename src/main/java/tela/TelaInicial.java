@@ -56,7 +56,7 @@ public class TelaInicial extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				InteligenciaFila pc = new InteligenciaFila();
-				pc.processarVideo("C:\\opencv\\yolov7-tiny.weights", "C:\\opencv\\yolov7-tiny.cfg", "C:\\opencv\\teste.mp4",
+				pc.processarVideo("files\\yolov7-tiny.weights", "files\\yolov7-tiny.cfg", "C:\\opencv\\teste.mp4",
 						tglRemovePessoas.isSelected());
 				pc.todosObjetos = tglRemovePessoas.isSelected();
 			}

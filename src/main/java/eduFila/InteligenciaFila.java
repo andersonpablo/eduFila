@@ -145,7 +145,7 @@ public class InteligenciaFila {
 		
 		if(respostDoFileChooser == JFileChooser.APPROVE_OPTION) {
 			File arquivoSelecionado = jfileChooser.getSelectedFile();
-			System.out.println("Camninho do arquivo selecionado: " + arquivoSelecionado.getAbsolutePath());
+			System.out.println("Caminho do arquivo selecionado: " + arquivoSelecionado.getAbsolutePath());
 			
 			if(cap != null) {
 				cap.release();
@@ -166,7 +166,7 @@ public class InteligenciaFila {
 
 	protected void IniciarGravacao() {
 		cap = new VideoCapture(0, Videoio.CAP_DSHOW);
-		processarVideo("C:\\opencv\\yolov7-tiny.weights", "C:\\opencv\\yolov7-tiny.cfg", "C:\\opencv\\teste.mp4", todosObjetos);
+		processarVideo("files\\yolov7-tiny.weights", "files\\yolov7-tiny.cfg", "file\\teste.mp4", todosObjetos);
 	}
 
 	public void processarVideo(String modelWeights, String modelConfiguration, String filePath, boolean todosObjetos) {
@@ -174,9 +174,6 @@ public class InteligenciaFila {
 			@Override
 			protected Void doInBackground() throws Exception {
 				System.load("C:\\opencv\\build\\java\\x64\\opencv_java480.dll");
-
-				//VideoCapture cap = new VideoCapture(filePath);
-				//VideoCapture cap = new VideoCapture(0, Videoio.CAP_DSHOW);
 
 				Mat frame = new Mat();
 
@@ -220,7 +217,7 @@ public class InteligenciaFila {
 						}
 
 					}
-						//conferindo se as listas n�o est�o vazias antes de continuar
+						//conferindo se as listas nao estao vazias antes de continuar
 					if (!confs.isEmpty() && !rects.isEmpty() && !labels.isEmpty()) {
 						
 					    MatOfFloat confidences = new MatOfFloat(Converters.vector_float_to_Mat(confs));
