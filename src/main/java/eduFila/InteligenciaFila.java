@@ -52,7 +52,9 @@ public class InteligenciaFila {
 	private JLabel vidpanel;
 	private JLabel contagem;
 	public VideoCapture cap;
+	public JButton botaoIniciar;
 	public boolean todosObjetos;
+	public int cameraSelecionada;
 
 	public InteligenciaFila() {
 		initializeGUI();
@@ -66,7 +68,7 @@ public class InteligenciaFila {
 		jframe.getContentPane().setLayout(new BorderLayout());
 		jframe.getContentPane().add(vidpanel, BorderLayout.CENTER);
 
-		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		jframe.setSize(800, 600); // defina um tamanho inicial
 		jframe.addComponentListener(new ComponentAdapter() {
 			@Override
@@ -90,40 +92,36 @@ public class InteligenciaFila {
 		lblNewLabel.setForeground(new Color(0, 128, 0));
 		menuBar.add(lblNewLabel);
 
-		JButton btnNewButton = new JButton("Iniciar");
-		btnNewButton.addActionListener(new ActionListener() {
+		botaoIniciar = new JButton("Iniciar");
+		botaoIniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				IniciarGravacao();
+				
+				if(botaoIniciar.getText().equals("Iniciar")) {
+					IniciarGravacao();
+				} else {
+					SelecionarVideo();
+				}
+				
 			}
 		});
-		btnNewButton.setFocusPainted(false);
-		btnNewButton.setForeground(Color.WHITE);
-		btnNewButton.setBackground(new Color(0, 128, 0));
-		menuBar.add(btnNewButton);
+		botaoIniciar.setFocusPainted(false);
+		botaoIniciar.setForeground(Color.WHITE);
+		botaoIniciar.setBackground(new Color(0, 128, 0));
+		menuBar.add(botaoIniciar);
 
-		JButton btnNewButton_1 = new JButton("Parar");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton botaoParar = new JButton("Parar");
+		botaoParar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				PararGravacao();
 			}
 		});
-		btnNewButton_1.setFocusPainted(false);
-		btnNewButton_1.setForeground(Color.WHITE);
-		btnNewButton_1.setBackground(new Color(179, 0, 4));
-		menuBar.add(btnNewButton_1);
-		
-		JButton btnNewButton_2 = new JButton("Monitorar Vídeo");
-		btnNewButton_2.setForeground(Color.WHITE);
-		btnNewButton_2.setBackground(Color.BLACK);
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SelecionarVideo();
-			}
-		});
-		menuBar.add(btnNewButton_2);
+		botaoParar.setFocusPainted(false);
+		botaoParar.setForeground(Color.WHITE);
+		botaoParar.setBackground(new Color(179, 0, 4));
+		menuBar.add(botaoParar);
 
 		JLabel lblNewLabel_1 = new JLabel(
-				"                                              ");
+				"                                                                    ");
 		menuBar.add(lblNewLabel_1);
 
 		contagem = new JLabel("Quantidade de Pessoas:");
@@ -152,7 +150,7 @@ public class InteligenciaFila {
 			}
 			
 			cap = new VideoCapture(arquivoSelecionado + "");
-			processarVideo("C:\\opencv\\yolov7-tiny.weights", "C:\\opencv\\yolov7-tiny.cfg", arquivoSelecionado + "", todosObjetos);
+			processarVideo("files\\yolov7-tiny.weights", "files\\yolov7-tiny.cfg", arquivoSelecionado + "", todosObjetos);
 			
 		} else {
 			System.out.println("nenhum arquivo encontrado");
@@ -165,7 +163,7 @@ public class InteligenciaFila {
 	}
 
 	protected void IniciarGravacao() {
-		cap = new VideoCapture(0, Videoio.CAP_DSHOW);
+		cap = new VideoCapture(cameraSelecionada, Videoio.CAP_DSHOW);
 		processarVideo("files\\yolov7-tiny.weights", "files\\yolov7-tiny.cfg", "file\\teste.mp4", todosObjetos);
 	}
 
